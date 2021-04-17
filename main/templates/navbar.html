@@ -14,15 +14,19 @@
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 {%if user.is_authenticated%}
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
+                    <a class="nav-link active" aria-current="page" href="{%url 'home'%}">Home</a>
                 </li>
+                {%if user.is_seller or user.is_customer%}
                 <li class="nav-item">
-                    <a class="nav-link" href="#" tabindex="-1" aria-disabled="true">Medicine</a>
+                    <a class="nav-link" href="{%url  'medicine'%}" tabindex="-1" aria-disabled="true">Medicine</a>
                 </li>
+                <!--  -->
+                {%elif user.is_superuser%}
                 <li class="nav-item">
                     <a class="nav-link" href="{%url 'sellerRegistration'%}" tabindex="-1" aria-disabled="true">Seller's</a>
                 </li>
-
+                {%endif%}
+                <!--  -->
                 {%else%}
                 <li class="nav-item">
                     <a class="nav-link" href="{%url 'mylogin'%}" tabindex="-1" aria-disabled="true">Login</a>

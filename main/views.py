@@ -96,3 +96,17 @@ def sellerRegistration(request):
 def mylogout(request):
     logout(request)
     return redirect('/login')
+
+
+def medicine(request):
+    if request.user.is_authenticated:
+        if request.user.is_seller:
+            return HttpResponse("Hi i am seller")
+        elif request.user.is_customer:
+            return HttpResponse("Hi i am customer")
+        elif request.user.is_superuser:
+            return redirect('/')
+        else:
+            pass
+    else:
+        return redirect('/')
