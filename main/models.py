@@ -24,6 +24,7 @@ class saveSeller(models.Model):
     username = models.CharField(max_length=120, blank=True, null=True)
     first_name = models.CharField(max_length=120, blank=True, null=True)
     last_name= models.CharField(max_length=120, blank=True, null=True)
+    email = models.CharField(max_length=120, blank=True, null=True)
     user_address = models.TextField(max_length=200, blank=True, null=True)
     phone_no = models.CharField(max_length=120, blank=True, null=True)
     password = models.CharField(max_length=120, blank=True, null=True)

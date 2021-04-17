@@ -1,0 +1,39 @@
+{%extends 'base.html'%}
+<!-- extending html -->
+{%block main_content%}
+<!--  -->
+<style>
+    .container {
+        margin-top: 50px;
+    }
+</style>
+<div class="container">
+    <div class="row row-cols-1 row-cols-md-2 g-4">
+        {%for i in seller%}
+        <!--  -->
+        <div class="col">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">{{i.seller_id}}</h5>
+                    <p class="card-text">{{i.first_name | title}} {{i.last_name | title}}</p>
+                    <p class="card-text">{{i.user_address | title}} </p>
+                    <p class="card-text">{{i.phone_no }} </p>
+                    <form method="POST">
+                        {%csrf_token%}
+                        <input type="hidden" name="userid" value="{{i.seller_id}}">
+                        <button class="btn btn-info shadow-none btn-block">Accept</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+        {%empty%}
+        <div class="text-danger">
+            <h1>No Elements</h1>
+        </div>
+        <!--  -->
+        {%endfor%}
+    </div>
+</div>
+<!--  -->
+{%endblock main_content%}

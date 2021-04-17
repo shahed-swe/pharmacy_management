@@ -53,12 +53,45 @@ def myregistration(request):
                 username = request.POST.get('username'),
                 first_name = request.POST.get('first-name'),
                 last_name = request.POST.get('last-name'),
+                email = request.POST.get('email'),
                 user_address = request.POST.get('address'),
                 phone_no = request.POST.get('phone-no'),
                 password = request.POST.get('password')
             )
             seller.save()
     return render(request, 'registration.html', {"title":"Registration"})
+
+def sellerRegistration(request):
+    if not request.user.is_superuser and request.user.is_authenticated:
+        return redirect('/')
+    else:
+        seller = saveSeller.objects.all()
+        if request.method == "POST":
+            id = request.POST.get('userid')
+            saved_seller = saveSeller.objects.filter(pk=id)
+            # print(saved_seller[0].username)
+            # print(saved_seller[0].password)
+            user = User(
+                username = saved_seller[0].username,
+                first_name = saved_seller[0].first_name,
+                last_name = saved_seller[0].last_name,
+                email = saved_seller[0].email,
+                is_seller = True,
+                is_active = True
+            )
+            user.set_password(saved_seller[0].password)
+            user.save()
+            seller_save = Seller(
+                user=user,
+                seller_id = saved_seller[0].seller_id,
+                user_address = saved_seller[0].user_address,
+                phone_no = saved_seller[0].phone_no,
+
+            )
+            seller_save.save()
+            saved_seller.delete()
+        context = {"title":"Accept Seller","seller":seller}
+        return render(request, 'accept_seller.html',context)
 
 def mylogout(request):
     logout(request)
