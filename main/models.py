@@ -11,19 +11,32 @@ class User(AbstractUser):
 
 class Seller(models.Model):
     seller_id = models.CharField(max_length=120, blank=True, null=True, unique=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="seller"),
-    address = models.CharField(max_length=500, blank=True, null=True),
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="seller")
+    user_address = models.TextField(max_length=200, blank=True, null=True)
     phone_no = models.CharField(max_length=120, blank=True, null=True)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+
+class saveSeller(models.Model):
+    seller_id = models.CharField(max_length=120, blank=True, null=True, unique=True)
+    username = models.CharField(max_length=120, blank=True, null=True)
+    first_name = models.CharField(max_length=120, blank=True, null=True)
+    last_name= models.CharField(max_length=120, blank=True, null=True)
+    user_address = models.TextField(max_length=200, blank=True, null=True)
+    phone_no = models.CharField(max_length=120, blank=True, null=True)
+    password = models.CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name
+
+
 class Customer(models.Model):
     customer_id = models.CharField(max_length=120, blank=True, null=True, unique=True)
-    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="customer"),
-    address = models.CharField(max_length=500, blank=True, null=True),
+    user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True, related_name="customer")
+    user_address = models.TextField(max_length=200, blank=True, null=True)
     phone_no = models.CharField(max_length=120, blank=True, null=True)
-    age = models.CharField(max_length=3, blank=True, null=True)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
