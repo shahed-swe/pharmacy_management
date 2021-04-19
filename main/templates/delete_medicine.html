@@ -1,0 +1,17 @@
+{%extends 'base.html'%}
+<!-- extending base  -->
+{%block main_content%}
+<!--  -->
+<div class="container">
+    <div class="row">
+        <h1>Are you sure you want to delete?</h1>
+        <form method="POST">
+            {%csrf_token%}
+            <div class="mb-3">
+                <input type="submit" value="Yes" name="button-value" class="btn btn-primary shadow-none">
+            </div>
+        </form>
+    </div>
+</div>
+<!--  -->
+{%endblock main_content%}

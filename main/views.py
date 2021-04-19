@@ -101,7 +101,36 @@ def mylogout(request):
 def medicine(request):
     if request.user.is_authenticated:
         if request.user.is_seller:
-            return HttpResponse("Hi i am seller")
+            companies = MedicineCompany.objects.all()
+            medicine = Medicine.objects.all()
+            context = {"title":"Add Medicine", "companies":companies, "medicine":medicine}
+            if request.method == "POST":
+                value = request.POST.get('button-value')
+                if value == "1":
+                    com_name = request.POST.get('company_name')
+                    if com_name != "":
+                        MedicineCompany.objects.create(company_name=com_name)
+                    else:
+                        pass
+                elif value == "2":
+                    company = request.POST.getlist('company')
+                    comp = [int(i) for i in company if i != None]
+                    medicine_name = request.POST.get('medicine_name')
+                    if medicine_name != "":
+                        medicine = Medicine(
+                            medicine_name = medicine_name,
+                            price = request.POST.get('price'),
+                            total_stock = request.POST.get('quantity')
+                        )
+                        medicine.save()
+                        for i in comp:
+                            medicine.company_name.add(i)
+                    else:
+                        pass
+                else:
+                    pass
+                return redirect('/medicine')
+            return render(request, 'add_medicine.html',context)
         elif request.user.is_customer:
             return HttpResponse("Hi i am customer")
         elif request.user.is_superuser:
@@ -110,3 +139,56 @@ def medicine(request):
             pass
     else:
         return redirect('/')
+
+    
+def edit_medicine_company(request, id):
+    if request.user.is_authenticated and request.user.is_seller:
+        company = MedicineCompany.objects.filter(pk=id)
+        context = {"title":"Edit Medicine Company","comp":company[0].company_name}
+        if request.method == "POST":
+            name = request.POST.get('company_name')
+            company.update(company_name=name)
+            return redirect('/medicine')
+        return render(request, 'edit_company.html', context)
+    else:
+        return redirect('/')
+
+
+def delete_medicine_company(request, id):
+    if request.user.is_authenticated and request.user.is_seller:
+        company = MedicineCompany.objects.filter(pk=id)
+        if request.method == "POST":
+            value = request.POST.get('button-value')
+            if value == "Yes":
+                # print("Deleted")
+                company.delete()
+            return redirect('/medicine')
+        return render(request, 'delete_company.html')
+
+def edit_medicine(request, id):
+    if request.user.is_authenticated and request.user.is_seller:
+        medicine = Medicine.objects.filter(pk=id)
+        context = {"title":"Edit Medicine Credentials", "medicine":medicine}
+        if request.method == "POST":
+            price = request.POST.get('price')
+            stock = request.POST.get('stock')
+            if price != "" and stock != "":
+                Medicine.objects.filter(pk=id).update(price=price, total_stock=stock)
+            else:
+                pass
+            return redirect('/medicine') 
+        return render(request, 'edit_medicine.html',context)
+    else:
+        return redirect('/')
+
+
+def delete_medicine(request, id):
+    if request.user.is_authenticated and request.user.is_seller:
+        medicine = Medicine.objects.filter(pk=id)
+        if request.method == "POST":
+            value = request.POST.get('button-value')
+            if value == "Yes":
+                # print("Deleted")
+                medicine.delete()
+            return redirect('/medicine')
+        return render(request, 'delete_medicine.html')

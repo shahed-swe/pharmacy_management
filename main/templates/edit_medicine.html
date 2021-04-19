@@ -1,0 +1,25 @@
+{%extends 'base.html'%}
+<!-- extending base  -->
+{%block main_content%}
+<!--  -->
+<div class="container">
+    <div class="row">
+        <h1>Update Medicine -> {{medicine.0.medicine_name}}</h1>
+        <form method="POST">
+            {%csrf_token%}
+            <div class="mb-3">
+                <label for="">Price</label>
+                <input type="text" class="form-control" name="price" value="{{medicine.0.price}}">
+            </div>
+            <div class="mb-3">
+                <label for="">Stock</label>
+                <input type="text" class="form-control" name="stock" value="{{medicine.0.total_stock}}">
+            </div>
+            <div class="mb-3">
+                <button class="btn btn-primary shadow-none">Update</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--  -->
+{%endblock main_content%}

@@ -1,0 +1,120 @@
+{%extends 'base.html'%}
+<!-- extending base html -->
+{%block main_content%}
+<!--  -->
+<style>
+    .medicine_company_add {
+        margin-bottom: 50px;
+    }
+</style>
+<section class="medicine_company_add">
+    <div class="container">
+        <div class="row">
+            <div class="col-6 col-md-6 col-sm-10">
+                <h1>Company Name</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for i in companies%}
+                        <tr>
+                            <th scope="row">{{i.pk}}</th>
+                            <td>{{i.company_name}}</td>
+                            <td>
+                                <a href="{%url 'edit_medicine_company' id=i.pk%}" class="btn btn-info shadow-block"><i class="bi bi-pencil"></i></a>
+                                <a href="{%url 'delete_medicine_company' id=i.pk%}" class="btn btn-danger shadow-block"><i class="bi bi-eraser"></i></a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6 col-md-6 col-sm-10">
+                <h1>Medicine Name</h1>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Id</th>
+                            <th scope="col">Medicine Name</th>
+                            <th scope="col">Company Name</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">Stock</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {%for i in medicine%}
+                        <tr>
+                            <th scope="row">{{i.pk}}</th>
+                            <td>{{i.medicine_name}}</td>
+                            <td>
+                                {%for j in i.company_name.all%}
+                                <span class="text-success">{{j.company_name}} </span><br>
+                                <!--  -->
+                                {%endfor%}
+                            </td>
+                            <td>{{i.price}}</td>
+                            <td>{{i.total_stock}}</td>
+                            <td>
+                                <a href="{%url 'edit_medicine' id=i.pk%}" class="btn btn-success shadow-block"><i class="bi bi-pencil"></i></a>
+                                <a href="{%url 'delete_medicine' id=i.pk%}" class="btn btn-danger shadow-block"><i class="bi bi-eraser"></i></a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6 col-md-6 col-sm-10">
+                <h1>Add Medicine Company</h1>
+                <form method="POST">
+                    {%csrf_token%}
+                    <div class="mb-3">
+                        <label for="">Enter Medicine Comapny Name</label>
+                        <input type="text" name="company_name" class="form-control" placeholder="Medicine Company name">
+                    </div>
+                    <div class="mb-3">
+                        <input type="hidden" name="button-value" value="1">
+                        <button class="btn btn-success">Add Company</button>
+                    </div>
+
+                </form>
+            </div>
+            <div class="col-6 col-md-6 col-sm -10">
+                <h1>Add Medicine</h1>
+                <form method="POST">
+                    {%csrf_token%}
+                    <div class="mb-3">
+                        <label for="">Enter Medicine Name</label>
+                        <input type="text" class="form-control" name="medicine_name" placeholder="Medicine Name">
+                    </div>
+                    <div class="mb-3">
+                        <select name="company" class="form-control" multiple>
+                            {%for i in companies%}
+                            <option value="{{i.pk}}">{{i.company_name}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Medicine Price</label>
+                        <input type="text" class="form-control" name="price" placeholder="Medicine Price">
+                    </div>
+                    <div class="mb-3">
+                        <label for="">Quantity</label>
+                        <input type="text" class="form-control" name="quantity" placeholder="Medicine Quantity">
+                    </div>
+                    <div class="md-3">
+                        <input type="hidden" value="2" name="button-value">
+                        <button class="btn btn-info shadow-none">Add Medicine</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+<!--  -->
+{%endblock main_content%}
