@@ -11,7 +11,9 @@ def home(request):
     if request.user.is_customer:
         customer = request.user.customer
         order,create = Order.objects.get_or_create(customer=customer, complete=False)
-    return render(request, 'home.html', {"title":"Home","order":order})
+        return render(request, 'home.html', {"title":"Home","order":order})
+    else:
+        return render(request, 'home.html', {"title": "Home"})
 
 
 def mylogin(request):
