@@ -38,6 +38,10 @@
             </ul>
             {%if user.is_authenticated%}
             <div class="d-flex">
+                {%if user.is_customer%}
+                <a class="nav-link" href="{%url 'cart'%}" tabindex="-1" aria-disabled="true"><i class="bi bi-cart">({{order.get_cart_item}})</i></a>
+                <!--  -->
+                {%endif%}
                 <a class="nav-link" href="{%url 'mylogout'%}" tabindex="-1" aria-disabled="true">Logout</a>
             </div>
             {%endif%}

@@ -3,11 +3,15 @@ from django.http import HttpResponse
 from django.contrib.auth import authenticate, login, logout
 from django.db import IntegrityError
 from .models import *
+import json
 # Create your views here.
 def home(request):
     if not request.user.is_authenticated:
         return redirect('/login')
-    return render(request, 'home.html', {"title":"Home"} )
+    if request.user.is_customer:
+        customer = request.user.customer
+        order,create = Order.objects.get_or_create(customer=customer, complete=False)
+    return render(request, 'home.html', {"title":"Home","order":order})
 
 
 def mylogin(request):
@@ -132,7 +136,20 @@ def medicine(request):
                 return redirect('/medicine')
             return render(request, 'add_medicine.html',context)
         elif request.user.is_customer:
-            return HttpResponse("Hi i am customer")
+            medicine = Medicine.objects.all()
+            customer = request.user.customer
+            order,create = Order.objects.get_or_create(customer=customer, complete=False)
+            context = {"title":"Medicine Store","medicine":medicine,"order":order}
+            if request.method == "POST":
+                medicine_id = request.POST.get('id')
+                quantity = request.POST.get('quantity')
+                if int(quantity) < 1:
+                    pass
+                else:
+                    medicine = Medicine.objects.get(id=medicine_id)
+                    order, created = Order.objects.get_or_create(customer=request.user.customer,complete=False)
+                    orderitem, created = OrderItem.objects.get_or_create(medicine = medicine,order = order, quantity = quantity )
+            return render(request, 'medicine_store.html', context)
         elif request.user.is_superuser:
             return redirect('/')
         else:
@@ -192,3 +209,19 @@ def delete_medicine(request, id):
                 medicine.delete()
             return redirect('/medicine')
         return render(request, 'delete_medicine.html')
+
+
+def cart(request):
+    if request.user.is_authenticated and request.user.is_customer:
+        customer = request.user.customer
+        order, create = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        context = {"title":"Cart Items","items":items, "order":order}
+        if request.method == "POST":
+            value = request.POST.get('button-value')
+            order = OrderItem.objects.filter(id=value)
+            order.delete()
+            return redirect('/cart')
+        return render(request, 'cart.html', context)
+    else:
+        return redirect('/')

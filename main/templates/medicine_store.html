@@ -1,0 +1,41 @@
+{%extends 'base.html'%}
+<!--  -->
+{%block main_content%}
+<!--  -->
+<style>
+    .medicine_store {
+        margin: 50px 0 50px 0;
+    }
+</style>
+<section class="medicine_store">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {%for i in medicine%}
+            <!--  -->
+            <div class="col">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{i.id}}</h5>
+                        <p class="card-text">{{i.medicine_name | title}}</p>
+                        <p class="card-text">Price: {{i.price}} </p>
+                        <p class="card-text">Total in Stock:{{i.total_stock}} </p>
+                        <form method="POST">
+                            {%csrf_token%}
+                            <input type="hidden" value="{{i.id}}" name="id">
+                            <input type="text" class="form-control" placeholder="How many you want to buy?" name="quantity" style="margin-bottom: 20px;">
+                            <button class="btn btn-info shadow-none btn-block update-cart">Add To Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+            <div class="text-danger">
+                <h1>No Elements</h1>
+            </div>
+            <!--  -->
+            {%endfor%}
+        </div>
+    </div>
+</section>
+<!--  -->
+{%endblock main_content%}

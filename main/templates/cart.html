@@ -1,0 +1,61 @@
+{%extends 'base.html'%}
+<!--  -->
+{%block main_content%}
+<!--  -->
+<style>
+    .medicine_store {
+        margin: 50px 0 50px 0;
+    }
+    
+    .second-row {
+        margin-top: 10px;
+    }
+</style>
+<section class="medicine_store">
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-2 g-4">
+            {%for i in items%}
+            <!--  -->
+            <div class="col-6 col-lg-6">
+                <div class="card">
+                    <div class="card-body">
+                        <p class="card-text">{{i.medicine.medicine_name}}</p>
+                        <p class="card-text">Price: {{i.medicine.price}} </p>
+                        <p class="card-text">Quantity: {{i.quantity}} </p>
+                        <form method="POST">
+                            {%csrf_token%}
+                            <input type="hidden" value="{{i.id}}" name="button-value">
+                            <button class="btn btn-outline-danger">Delete</button>
+                        </form>
+
+
+                    </div>
+                </div>
+            </div>
+            {%empty%}
+            <div class="text-danger">
+                <h1>No Elements</h1>
+            </div>
+            <!--  -->
+            {%endfor%}
+        </div>
+        <div class="row second-row">
+            <div class="total_price col-6 col-lg-6">
+                <h4 class="text-success">Sub Total:
+                    <span style="color: black">৳ {{order.get_cart_total}} Taka</span>
+                </h4>
+
+            </div>
+            <div class="total_price col-6 col-lg-6 ">
+                <div class="d-flex flex-row-reverse">
+                    <a href="#" class="btn btn-info shadow-none">Checkout</a>
+                    <a href="#" class="btn btn-danger shadow-none" style="margin-right:5px;">Keep Shopping</a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+<!--  -->
+{%endblock main_content%}

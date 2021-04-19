@@ -61,14 +61,37 @@ class Medicine(models.Model):
 
 
 class Order(models.Model):
-    medicine = models.ForeignKey(Medicine,on_delete=models.CASCADE, blank=True, null=True,related_name="medicine")
+    customer = models.ForeignKey(Customer, on_delete=models.SET_NULL, blank=True, null=True)
+    complete = models.BooleanField(default=False)
+    trx_id = models.CharField(max_length=120, blank=True, null=True)
+
+    def __str__(self):
+        return self.customer.user.username + ":"+ str(self.pk)
+
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+    
+    @property
+    def get_cart_item(self):
+        orderitems = self.orderitem_set.all()
+        total = len([item.pk for item in orderitems])
+        return total
+    
+    @property
+    def order_id_list(self):
+        orderitems = self.orderitem_set.all()
+        order_id = [item.id for item in orderitems]
+        return order_id
+
+class OrderItem(models.Model):
+    medicine = models.ForeignKey(Medicine, on_delete=models.SET_NULL, blank=True, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL,blank=True, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
 
     @property
-    def total_price(self):
+    def get_total(self):
         total = self.medicine.price * self.quantity
         return total
-
-    def __str__(self):
-        return self.medicine.medicine_name
-
