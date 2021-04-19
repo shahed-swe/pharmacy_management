@@ -1,0 +1,13 @@
+{%extends 'base.html'%}
+<!--  -->
+{%block main_content%}
+<!--  -->
+<div class="container">
+    <h1>Want to buy everything in your cart?</h1>
+    <form method="POST">
+        {%csrf_token%}
+        <input type="submit" class="btn btn-outline-danger shodow-none">
+    </form>
+</div>
+<!--  -->
+{%endblock main_content%}

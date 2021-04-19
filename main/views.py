@@ -225,3 +225,24 @@ def cart(request):
         return render(request, 'cart.html', context)
     else:
         return redirect('/')
+
+def checkout(request):
+    if request.user.is_authenticated and request.user.is_customer:
+        customer = request.user.customer
+        order = Order.objects.get(customer=customer)
+        items = order.orderitem_set.all()
+        if len(OrderItem.objects.all()) == 0:
+            return redirect('/medicine')
+        new_list = []
+        new_dict = {}
+        if request.method == "POST":
+            for i in items:
+                medicine = Medicine.objects.filter(medicine_name=i.medicine.medicine_name)
+                stock = medicine[0].total_stock
+                new_value = int(stock) - i.quantity
+                medicine.update(total_stock=new_value)
+                orderitem = OrderItem.objects.filter(id=i.id).delete()
+            return redirect('/')
+        return render(request, 'checkout.html',{"title":"Shop"})
+    else:
+        return redirect('/')

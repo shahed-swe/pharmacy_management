@@ -14,5 +14,6 @@ urlpatterns = [
     url(r'^delete_medicine/(?P<id>.*)/$', views.delete_medicine, name="delete_medicine"),
     url(r'^edit_medicine/(?P<id>.*)/$', views.edit_medicine, name="edit_medicine"),
     path('cart/',views.cart, name="cart"),
-    
+    path('checkout/',views.checkout,name="checkout"),
+
 ]
